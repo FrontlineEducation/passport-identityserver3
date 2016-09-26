@@ -74,6 +74,7 @@ Client.prototype.callbackUrl = function(req) {
 Client.prototype.authorizationUrl = function(req, state) {
     var config = this.config,
         params = extend({}, {
+            acr_values: config.acr_values.join(' '),
             state: state,
             response_type: 'code',
             client_id: config.client_id,
