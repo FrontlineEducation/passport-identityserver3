@@ -88,7 +88,7 @@ Client.prototype.authorizationUrl = function(req, state) {
 Client.prototype.getEndSessionUrl = function(req) {
     var session = req.session,
         params = {
-            id_token_hint: session.tokens.id_token,
+            id_token_hint: session.tokens ? session.tokens.id_token : undefined,
             post_logout_redirect_uri: this.config.post_logout_redirect_uri || common.resolveUrl(req, '/')
         };
 
