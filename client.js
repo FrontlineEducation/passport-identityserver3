@@ -72,9 +72,16 @@ Client.prototype.callbackUrl = function(req) {
 };
 
 Client.prototype.authorizationUrl = function(req, state) {
+    var acr_values = config.acr_values.join(' ');
+    var orgId = req.query['org_id'];
+
+    // If request has "org_id" query param, include that with acr values.
+    if (orgId)
+        acr_values += ` orgId:${orgId}`;
+
     var config = this.config,
         params = extend({}, {
-            acr_values: config.acr_values.join(' '),
+            acr_values: acr_values,
             state: state,
             response_type: 'code',
             client_id: config.client_id,
