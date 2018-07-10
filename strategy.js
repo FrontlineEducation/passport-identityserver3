@@ -46,7 +46,7 @@ function Strategy(identifier, config) {
         // create a defensive copy of array,
         // just to ensure that the user's initial
         // config doesn't get messed up.
-        config.acr_appenders = config.acr_appenders.splice();
+        config.acr_appenders = config.acr_appenders.slice();
     } else {
         config.acr_appenders = [];
     }
