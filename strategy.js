@@ -21,6 +21,36 @@ function Strategy(identifier, config) {
         };
     }
 
+    if(!config.acr_values) {
+        config.acr_values = [];
+    }
+
+    // Users may specify any number of functions as ACR Appender callbacks.
+    // Each of these functions will be called with the request object and state,
+    // and should return an object representing key-value pairs that should be
+    // appended to the ACR table.
+    //
+    // Example of such a function:
+    // function(req, state) {
+    //     var acr = {foo:'bar', state: state};
+    //     if (req.query['org_id']) {
+    //         acr['orgId'] = req.query['org_id'];
+    //     }
+    //     return acr;
+    // }
+    //
+    // Callbacks that are sufficiently complex should implement their own error-handling logic,
+    // as any uncaught exceptions thrown by these callbacks will be entirely discarded by this
+    // library.
+    if (Array.isArray(config.acr_appenders)) {
+        // create a defensive copy of array,
+        // just to ensure that the user's initial
+        // config doesn't get messed up.
+        config.acr_appenders = config.acr_appenders.splice();
+    } else {
+        config.acr_appenders = [];
+    }
+
     passport.Strategy.call(this);
 
     this.name = identifier;
