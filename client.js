@@ -77,7 +77,7 @@ Client.prototype.authorizationUrl = function(req, state) {
 
     // If request has "org_id" query param, include that with acr values.
     if (orgId)
-        acr_values += `orgId:${orgId}`;
+        acr_values += ` orgId:${orgId}`;
 
     var config = this.config,
         params = extend({}, {
