@@ -91,7 +91,7 @@ Client.prototype.authorizationUrl = function(req, state) {
         }
         if (newAcrEntries) {
             for (var x in newAcrEntries) {
-                if (newAcrEntries.hasOwnProperty(x)) {
+                if (newAcrEntries.hasOwnProperty(x) && newAcrEntries[x]) {
                     // Should this be passed through encodeURIComponent?
                     acrValues.push(`${x}:${newAcrEntries[x].toString()}`.trim());
                 }
