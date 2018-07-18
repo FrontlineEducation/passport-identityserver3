@@ -73,8 +73,34 @@ Client.prototype.callbackUrl = function(req) {
 
 Client.prototype.authorizationUrl = function(req, state) {
     var config = this.config,
-        params = extend({}, {
-            acr_values: config.acr_values.join(' '),
+    acrValues  = this.config.acr_values.slice(); // array copy
+
+    // Append additional acr pairs according to config.
+    for (var i = 0; i < config.acr_appenders.length; i++) {
+        var acrAppender = config.acr_appenders[i];
+
+        if ('function' !== typeof acrAppender) {
+            continue;
+        }
+
+        var newAcrEntries;
+        try {
+            newAcrEntries = acrAppender(req, state);
+        } catch (ignored) {
+            continue;
+        }
+        if (newAcrEntries) {
+            for (var x in newAcrEntries) {
+                if (newAcrEntries.hasOwnProperty(x) && newAcrEntries[x]) {
+                    // Should this be passed through encodeURIComponent?
+                    acrValues.push(`${x}:${newAcrEntries[x].toString()}`.trim());
+                }
+            }
+        }
+    }
+
+    var params = extend({}, {
+            acr_values: acrValues.join(' '),
             state: state,
             response_type: 'code',
             client_id: config.client_id,
